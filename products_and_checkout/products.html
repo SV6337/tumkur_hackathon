@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <style>
+    /* General Styles */
+    body {
+      /*background: linear-gradient(135deg, #232526, #414345);*/
+      color: #3e3e3e;
+      font-family: 'Comic Sans MS', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: url(https://images.unsplash.com/photo-1497211419994-14ae40a3c7a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-repeat: no-repeat; 
+  background-size: cover;  
+  background-position: center;
+    } 
+
+
+    header {
+      background-color: transparent; /* Vibrant mustard yellow */
+      padding: 30px;
+      text-align: center;
+      color: #2d2d2d;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      font-family: Arial, Helvetica, sans-serif;
+      width: 100%;
+      overflow: hidden;
+    }
+
+
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+      color: #4a7c59; /* Dark green */
+      position: relative;
+      animation: floaty 2s infinite ease-in-out;
+    }
+
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+
+    .cart-button {
+      position: absolute;
+      right: 90px;
+      top: 35px;
+      background-color: #ffe29a; /* Lighter yellow */
+      color: #4a7c59;
+      padding: 15px 20px;
+      text-decoration: none;
+      border-radius: 50px;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+    }
+
+
+    .cart-button:hover {
+      background-color: #ffb74a; /* Darker mustard */
+      transform: scale(1.1);
+    }
+
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+
+    /* Product Card */
+    .product-card {
+      background-color: #ffffff;
+      border: 3px dashed #ffd966;
+      border-radius: 20px;
+      margin: 20px;
+      padding: 20px;
+      width: 220px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      transition: transform 0.4s, background-color 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    .product-card:hover {
+      transform: scale(1.1) rotate(-2deg);
+      background-color: #fff8e0;
+    }
+
+
+    /* Product Image */
+    .product-card img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      transition: transform 0.4s ease-in-out;
+    }
+
+
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
+
+
+    /* Product Text */
+    .product-card h3 {
+      font-size: 1.8em;
+      color: #ff7e29;
+      margin: 0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+
+    .product-card p {
+      font-size: 1.1em;
+      color: #555;
+      margin: 10px 0;
+    }
+
+
+    /* Button */
+    .product-card button {
+      background-color: #ff7e29; /* Bright orange */
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+
+    .product-card button:hover {
+      background-color: #ff9f50;
+      transform: scale(1.05);
+    }
+
+
+    /* Quantity Input */
+    .product-card input[type="number"] {
+      width: 70%;
+      padding: 8px;
+      border-radius: 15px;
+      border: 2px solid #ffd966;
+      margin-top: 10px;
+      font-size: 1.1em;
+      text-align: center;
+      transition: border 0.3s;
+    }
+
+
+    .product-card input[type="number"]:focus {
+      outline: none;
+      border: 2px solid #ff7e29; /* Highlighted border */
+    }
+
+
+    /* Sparkle animation */
+    header::before,
+    header::after {
+      content: '✨';
+      font-size: 1.5em;
+      color: #ff7e29;
+      position: absolute;
+      animation: sparkle 2s infinite alternate ease-in-out;
+    }
+
+
+    header::before {
+      left: 10px;
+      top: 10px;
+    }
+
+
+    header::after {
+      right: 10px;
+      bottom: 10px;
+    }
+
+
+    @keyframes sparkle {
+      from { transform: scale(1); opacity: 0.5; }
+      to { transform: scale(1.3); opacity: 1; }
+    }
+    /* Search Bar Styles */
+#search-input {
+  width: 60%;
+  padding: 15px;
+  margin: 20px auto;
+  display: block;
+  font-size: 1.2em;
+  color: #4a7c59; /* Dark green */
+  background: #ffebc6; /* Light mustard */
+  border: 3px solid #ffd966; /* Mustard yellow */
+  border-radius: 25px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+#search-input:focus {
+  outline: none;
+  border: 3px solid #ff7e29; /* Bright orange when focused */
+  box-shadow: 0 8px 20px rgba(255, 126, 41, 0.5);
+  transform: scale(1.05);
+}
+
+/* Additional Animations for Smooth Effect */
+#search-input::placeholder {
+  color: #ff7e29;
+  opacity: 0.8;
+}
+
+  </style>
+</head>
+<body>
+  
+    <h1>Product List</h1>
+    <input type="text" id="search-input" placeholder="Search products..." oninput="searchProducts()">
+    <a href="cart.html" class="cart-button">🛒 View Cart</a>
+  
+  <div class="container" id="product-list"></div>
+
+  <script>
+    const apiUrl = 'http://localhost:3003';
+    let products = []; // Store products globally
+
+    // Fetch and render products
+    async function fetchProducts() {
+      const response = await fetch(`${apiUrl}/products`);
+      products = await response.json();
+      renderProducts(products);
+    }
+
+    // Render products based on the provided list
+    function renderProducts(productsList) {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+
+      productsList.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        const imageUrl = `${product.name.toLowerCase().replace(/\s+/g, '_')}.jpg`;
+
+        productCard.innerHTML = `
+          <img src="${imageUrl}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>Price: ₹${product.price}</p>
+          <p>Stock: ${product.stock}</p>
+          <input type="number" id="quantity-${product.name}" min="1" placeholder="Enter quantity">
+          <button onclick="addToCart('${product.name}')">Add to Cart</button>
+        `;
+        productList.appendChild(productCard);
+      });
+    }
+
+    // Filter products based on search input
+    function searchProducts() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm)
+      );
+      renderProducts(filteredProducts);
+    }
+
+    async function addToCart(productName) {
+      const quantity = parseInt(document.getElementById(`quantity-${productName}`).value);
+      if (!quantity || quantity <= 0) {
+        alert('Enter a valid quantity.');
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/cart/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: productName, quantity }),
+      });
+
+      if (response.ok) {
+        alert(`${quantity} ${productName} added to cart.`);
+        window.location.href = 'cart.html';
+      } else {
+        const result = await response.json();
+        alert(result.message);
+      }
+    }
+
+    fetchProducts(); // Fetch products on page load
+  </script>
+</body>
+</html>

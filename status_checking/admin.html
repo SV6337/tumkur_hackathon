@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Update Order Status</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .container { max-width: 600px; margin: auto; padding: 20px; }
+    .status-update { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin - Update Order Status</h1>
+  </header>
+  <div class="container">
+    <label for="order-number">Enter Order Number:</label>
+    <input type="text" id="order-number" placeholder="ORD-123456789">
+    <link rel="stylesheet" href="styles.css">
+    <label for="status">Select New Status:</label>
+    <select id="status">
+      <option value="Order Placed">Order Placed</option>
+      <option value="Order Confirmed">Order Confirmed</option>
+      <option value="Dispatched">Dispatched</option>
+      <option value="Delivered">Delivered</option>
+    </select>
+    
+    <button onclick="updateOrderStatus()">Update Status</button>
+
+    <div id="status-update" class="status-update"></div>
+  </div>
+
+  <script>
+    const apiUrl = 'http://localhost:3000';
+
+    async function updateOrderStatus() {
+      const orderNumber = document.getElementById('order-number').value;
+      const newStatus = document.getElementById('status').value;
+
+      if (!orderNumber) {
+        alert('Please enter a valid order number.');
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/order/update-status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderNumber, newStatus })
+      });
+
+      const result = await response.json();
+
+      if (response.status !== 200) {
+        document.getElementById('status-update').innerHTML = `<p>Error: ${result.message}</p>`;
+      } else {
+        document.getElementById('status-update').innerHTML = `<p>Order status updated successfully!</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code</title>
+    <style>
+
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            background: linear-gradient(to bottom, #d4f1b4, #4caf50);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            color: #2e7d32;
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Input Fields */
+        input[type="text"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 2px solid #8bc34a;
+            background-color: #f1f8e9;
+            color: #2e7d32;
+            font-size: 16px;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        /* Input Focus */
+        input[type="text"]:focus {
+            border-color: #66bb6a;
+            transform: scale(1.02);
+        }
+
+        /* Submit Button */
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Headings */
+        h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #388e3c;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+      <div class="form-container">
+
+    <h2>Verify Code</h2>
+
+    <form action="/verify-code" method="post">
+        <input type="hidden" name="gmail" value="{{gmail}}">
+        <label for="code">Enter the 4-digit code:</label>
+        <input type="text" name="code" required pattern="\d{4}" title="Enter a 4-digit code">
+        <br><br>
+        <input type="submit" value="Verify Code">
+    </form>
+</div>
+</body>
+</html>

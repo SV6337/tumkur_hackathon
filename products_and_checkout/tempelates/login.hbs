@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            background: linear-gradient(to bottom, #d4f1b4, #4caf50);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            color: #2e7d32;
+        }
+
+        /* Form container styling */
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Smooth appearance animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Input fields */
+        input[type="text"], 
+        input[type="password"], 
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #8bc34a;
+            background-color: #f1f8e9;
+            color: #2e7d32;
+            font-size: 16px;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        /* Submit button styling */
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Field focus effect */
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            border-color: #66bb6a;
+            transform: scale(1.02);
+        }
+
+        /* Headings */
+        h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #388e3c;
+        }
+
+        h3 {
+            margin: 20px 0 10px;
+            font-size: 18px;
+            color: #2e7d32;
+        }
+
+        /* Links styling */
+        a {
+            color: #4caf50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        a:hover {
+            color: #2e7d32;
+            transform: scale(1.05);
+            text-decoration: underline;
+        }
+
+        /* Forgot password section */
+        .forgot-password {
+            margin-top: 20px;
+        }
+
+        /* Mobile responsive tweaks */
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+
+            h3 {
+                font-size: 16px;
+            }
+        }
+</style>
+
+</head>
+<body>
+     <div class="form-container">
+
+    <h2>Log In</h2>
+
+    <form action="/login" method="post" >
+        <input placeholder="Name" name="name" type="text" required>
+            <br>
+            <input placeholder="Password" name="password" type="password" required>
+            <br>
+            <input class="sub" type="submit" value="Log In">
+     <h3>Dont have a account ?</h3>
+    <a href="/signup">Create a new account</a>
+    </form>
+
+
+            <h3>Forgot your password?</h3>
+            <a href="/forgot-password">Reset your password here</a>
+    </div>
+    
+</body>
+</html>

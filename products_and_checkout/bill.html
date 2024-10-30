@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Bill</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Crazy Black and Orange Theme */
+    body {
+      /*background-color: #1a1a1a;  */
+      color: #ff8c00; /* Vibrant orange text */
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url(https://images.unsplash.com/photo-1497211419994-14ae40a3c7a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-repeat: no-repeat; 
+  background-size: cover;  
+  background-position: center;
+    }
+
+
+    h1 {
+      text-align: center;
+      color: #ff4500; /* Bright orange */
+      font-size: 3em;
+      margin-top: 20px;
+    }
+
+
+    .container {
+      width: 80%;
+      max-width: 650px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: black;
+      border: 4px dashed #ff4500; /* Dashed border for craziness */
+      border-radius: 20px;
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+
+    h2 {
+      color: #ff8c00; /* Orange for subtitles */
+      font-size: 1.8em;
+      border-bottom: 2px dotted #ff4500;
+      padding-bottom: 5px;
+      margin-top: 25px;
+    }
+
+
+    p {
+      color: #ff4500; /* Orange for paragraph text */
+      font-size: 1.2em;
+      line-height: 1.5;
+      margin: 12px 0;
+    }
+
+
+    .order-item {
+      background-color: #ff6f00; /* Bright orange background */
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #ff4500; /* Vibrant border */
+      margin: 15px 0;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      color: #1a1a1a;
+    }
+
+
+    .order-total, .additional-charges {
+      font-weight: bold;
+      color: #ff4500; /* Vibrant orange */
+      font-size: 1.2em;
+      text-align: left;
+      margin-top: 10px;
+    }
+
+
+    .grand-total {
+      font-weight: bold;
+      color: #ff4500; /* Vibrant orange */
+      font-size: 1.5em;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+
+    /* Button Styles */
+    .download-btn {
+      background-color: #ffb74d; /* Bright button background */
+      color: #1a1a1a; /* Dark text for contrast */
+      padding: 10px 20px;
+      border-radius: 20px; /* Matching rounded corners */
+      text-decoration: none; /* No underline */
+      font-weight: bold; /* Bold text */
+      transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+      cursor: pointer; /* Pointer on hover */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Slight shadow for depth */
+      margin-top: 20px; /* Spacing above the button */
+    }
+
+
+    .download-btn:hover {
+      background-color: #ff8c00; /* Darker on hover */
+      transform: scale(1.1); /* Slightly enlarge on hover */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Your Order Bill</h1>
+  </header>
+  <div class="container" id="bill-details">
+    <p style="color: black;">Loading your order details...</p>
+  </div>
+
+
+  <script>
+    const apiUrl = 'http://localhost:3003';
+
+
+    async function fetchBill() {
+      const response = await fetch(`${apiUrl}/order/latest`);
+      const order = await response.json();
+      const billDetails = document.getElementById('bill-details');
+
+
+      // Calculate SGST, CGST, and Total Amount
+      const sgstRate = 0.025; // 2.5%
+      const cgstRate = 0.025; // 2.5%
+      const deliveryCharges = 25;
+
+
+      // Calculate total amount for items
+      const itemTotal = order.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      const sgstAmount = itemTotal * sgstRate;
+      const cgstAmount = itemTotal * cgstRate;
+      const grandTotal = itemTotal + sgstAmount + cgstAmount + deliveryCharges;
+
+
+      billDetails.innerHTML = `
+        <h2>Order Number: ${order.orderNumber}</h2>
+        <h2>Customer Details</h2>
+        <p><strong>Name:</strong> ${order.name}</p>
+        <p><strong>Email:</strong> ${order.email}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+       
+        <h2>Order Summary</h2>
+        ${order.items.map(item => `
+          <div class="order-item">
+            <p style="color: black;">${item.name} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</p>
+          </div>
+        `).join('')}
+       
+        <div class="order-total">Subtotal: ₹${itemTotal.toFixed(2)}</div>
+        <div class="additional-charges">SGST (2.5%): ₹${sgstAmount.toFixed(2)}</div>
+        <div class="additional-charges">CGST (2.5%): ₹${cgstAmount.toFixed(2)}</div>
+        <div class="additional-charges">Delivery Charges: ₹${deliveryCharges}</div>
+        <div class="grand-total">Grand Total: ₹${grandTotal.toFixed(2)}</div>
+        <button class="download-btn" onclick="downloadBill()">Download Bill</button>
+      `;
+    }
+
+
+    async function downloadBill() {
+      const response = await fetch(`${apiUrl}/order/latest`);
+      const order = await response.json();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+
+      // Add content to the PDF
+      doc.text(`Order Number: ${order.orderNumber}`, 10, 10);
+      doc.text(`Name: ${order.name}`, 10, 20);
+      doc.text(`Email: ${order.email}`, 10, 30);
+      doc.text(`Address: ${order.address}`, 10, 40);
+
+
+      doc.text('Order Summary:', 10, 50);
+      let yPosition = 60;
+
+
+      order.items.forEach(item => {
+        doc.text(`${item.name} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}`, 10, yPosition);
+        yPosition += 10;
+      });
+
+
+      // Calculate totals
+      const itemTotal = order.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      const sgstAmount = itemTotal * 0.025; // 2.5%
+      const cgstAmount = itemTotal * 0.025; // 2.5%
+      const deliveryCharges = 25;
+      const grandTotal = itemTotal + sgstAmount + cgstAmount + deliveryCharges;
+
+
+      doc.text(`Subtotal: ₹${itemTotal.toFixed(2)}`, 10, yPosition);
+      yPosition += 10;
+      doc.text(`SGST (2.5%): ₹${sgstAmount.toFixed(2)}`, 10, yPosition);
+      yPosition += 10;
+      doc.text(`CGST (2.5%): ₹${cgstAmount.toFixed(2)}`, 10, yPosition);
+      yPosition += 10;
+      doc.text(`Delivery Charges: ₹${deliveryCharges}`, 10, yPosition);
+      yPosition += 10;
+      doc.text(`Grand Total: ₹${grandTotal.toFixed(2)}`, 10, yPosition);
+
+
+      doc.save('bill.pdf');
+
+
+      // Redirect to home page after 1 minute
+      setTimeout(() => {
+        window.location.href = 'http://localhost:3000'; // Adjust the path if necessary
+      }, 10000); // 60000 milliseconds = 1 minute
+    }
+
+
+    fetchBill();
+  </script>
+</body>
+</html>
+
+
+
+
+

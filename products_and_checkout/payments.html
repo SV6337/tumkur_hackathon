@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Payments</title>
+  <style>
+    /* Black and Pale Orange Theme */
+    body {
+      /*background-color: black;*/
+      color: #ff8c00;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url(https://images.unsplash.com/photo-1497211419994-14ae40a3c7a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-repeat: no-repeat; 
+  background-size: cover;  
+  background-position: center;
+    }
+
+    .payment-container {
+      width: 90%;
+      max-width: 600px;
+      padding: 30px;
+      background-color: black;
+      border: 4px dashed #ff4500;
+      border-radius: 20px;
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #ff4500;
+      margin-bottom: 20px;
+    }
+
+    .payment-method {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .payment-option, .submit-btn, .upi-option {
+      background-color: #ff6f00;
+      color: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #ff4500;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .payment-option:hover, .submit-btn:hover, .upi-option:hover {
+      background-color: #ff8c00;
+      transform: scale(1.05);
+    }
+
+    .form-container, .upi-options-container {
+      display: none;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .note {
+      margin-top: 25px;
+      color: #ff8c00;
+      font-size: 1.1em;
+    }
+
+    label, input {
+      display: block;
+      font-size: 1em;
+      margin-top: 10px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ff4500;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <h1>Select Payment Method</h1>
+    <div class="payment-method">
+      <div class="payment-option" onclick="showForm('card')">💳 Debit Card</div>
+      <div class="payment-option" onclick="showForm('card')">💳 Credit Card</div>
+      <div class="payment-option" onclick="showForm('upi')">📲 UPI</div>
+    </div>
+
+    <!-- Card Details Form -->
+    <div id="card-form" class="form-container">
+      <h2>Enter Card Details</h2>
+      <label for="card-number">Card Number:</label>
+      <input type="number" id="card-number" placeholder="1234 5678 9012 3456">
+      
+      <label for="expiry">Expiry Date:</label>
+      <input type="text" id="expiry" placeholder="MM/YY">
+      
+      <label for="cvv">CVV:</label>
+      <input type="number" id="cvv" placeholder="123">
+      
+      <button class="submit-btn" onclick="processPayment('card')">Proceed with Card Payment</button>
+    </div>
+
+    <!-- UPI Options -->
+    <div id="upi-options" class="upi-options-container">
+      <h2>Select UPI App</h2>
+      <div class="upi-option" onclick="redirectToUPI('Google Pay')">Google Pay</div>
+      <div class="upi-option" onclick="redirectToUPI('PhonePe')">PhonePe</div>
+      <div class="upi-option" onclick="redirectToUPI('Paytm')">Paytm</div>
+    </div>
+
+    <p class="note">Secure payments powered by trusted providers.</p>
+  </div>
+
+  <script>
+    function showForm(type) {
+      document.getElementById('card-form').style.display = 'none';
+      document.getElementById('upi-options').style.display = 'none';
+
+      if (type === 'card') {
+        document.getElementById('card-form').style.display = 'block';
+      } else if (type === 'upi') {
+        document.getElementById('upi-options').style.display = 'block';
+      }
+    }
+
+    function processPayment(method) {
+      alert(Processing ${method === 'card' ? 'Card Payment' : 'UPI Payment'}...);
+      // Add actual processing logic here
+    }
+
+    function redirectToUPI(app) {
+      alert(Redirecting to ${app}...);
+      // Add logic to open UPI app if on mobile, or simulate redirect
+    }
+  </script>
+</body>
+</html>

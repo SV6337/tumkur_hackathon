@@ -1,0 +1,162 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Management</title>
+    <style>
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /*background: linear-gradient(135deg, #232526, #414345);*/
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url(https://images.unsplash.com/photo-1497211419994-14ae40a3c7a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-repeat: no-repeat; 
+  background-size: cover;  
+  background-position: center;
+        }
+    
+        /* Title */
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #f4a261;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+    
+        /* Form Container */
+        form {
+            background: #1c1c1c;
+            border-radius: 8px;
+            padding: 30px;
+            width: 400px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+            border-top: 3px solid #f4a261;
+            transition: transform 0.3s;
+        }
+    
+        form:hover {
+            transform: scale(1.02);
+        }
+    
+        /* Input Fields */
+        input, select, button {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border: none;
+            background: #333;
+            color: #f0f0f0;
+            font-size: 1em;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+    
+        /* Input and Select Hover and Focus */
+        input:focus, select:focus {
+            background: #444;
+            box-shadow: 0px 0px 5px #f4a261;
+            outline: none;
+        }
+    
+        /* Button */
+        button {
+            background: #f4a261;
+            color: #1c1c1c;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        button:hover {
+            background: #e76f51;
+            color: #fff;
+            box-shadow: 0px 4px 15px rgba(244, 162, 97, 0.3);
+        }
+    
+        /* Message */
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.1em;
+            color: #f4a261;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Update Stock</h1>
+<form id="stockForm">
+    <label for="product">Select Product:</label>
+    <select id="product" name="product" required>
+        <option value="Carrots">Carrots</option>
+        <option value="Spinach">Spinach</option>
+        <option value="Bell Peppers">Bell Peppers</option>
+        <option value="Broccoli">Broccoli</option>
+        <option value="Eggplant">Eggplant</option>
+        <option value="Apples">Apples</option>
+        <option value="Bananas">Bananas</option>
+        <option value="Mangoes">Mangoes</option>
+        <option value="Oranges">Oranges</option>
+        <option value="Grapes">Grapes</option>
+        <option value="Basmati Rice">Basmati Rice</option>
+        <option value="Sona Masoori Rice">Sona Masoori Rice</option>
+        <option value="Jeera Rice">Jeera Rice</option>
+        <option value="Brown Rice">Brown Rice</option>
+        <option value="Wild Rice">Wild Rice</option>
+        <option value="Moong Dal">Moong Dal</option>
+        <option value="Toor Dal">Toor Dal</option>
+        <option value="Masoor Dal">Masoor Dal</option>
+        <option value="Chana Dal">Chana Dal</option>
+        <option value="Urad Dal">Urad Dal</option>
+        <option value="Olive Oil">Olive Oil</option>
+        <option value="Coconut Oil">Coconut Oil</option>
+        <option value="Mustard Oil">Mustard Oil</option>
+        <option value="Sunflower Oil">Sunflower Oil</option>
+        <option value="Sesame Oil">Sesame Oil</option>
+    </select>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" required min="1">
+
+    <button type="submit">Update Stock</button>
+</form>
+
+<div id="message"></div>
+
+<script>
+document.getElementById('stockForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const product = document.getElementById('product').value;
+    const quantity = parseInt(document.getElementById('quantity').value, 10);
+    
+    try {
+        const response = await fetch('http://localhost:3001/update-stock', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ product, quantity })
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('message').innerText = result.message || result.error;
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('message').innerText = 'An error occurred while updating stock.';
+    }
+});
+</script>
+
+</body>
+</html>

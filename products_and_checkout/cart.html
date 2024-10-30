@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <style>
+    /* Body Styling */
+    body {
+      /*background: linear-gradient(135deg, #232526, #414345);*/
+      color: #f0f0f0;
+      font-family: 'Comic Sans MS', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background-image: url(https://images.unsplash.com/photo-1497211419994-14ae40a3c7a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-repeat: no-repeat; 
+  background-size: cover;  
+  background-position: center;
+    }
+
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+      color: #ffffff;
+      position: relative;
+    }
+
+
+    header::before,
+    header::after {
+      content: '✨';
+      font-size: 1.5em;
+      color: #ff9f50;
+      position: absolute;
+      animation: sparkle 1.5s infinite alternate ease-in-out;
+    }
+
+
+    header::before {
+      left: 15px;
+      top: 15px;
+    }
+
+
+    header::after {
+      right: 15px;
+      bottom: 15px;
+    }
+
+
+    h1 {
+      font-size: 2.5em;
+      color: #f4a261;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin-bottom: 10px;
+    }
+
+
+    /* Cart Button */
+    .cart-button {
+      position: absolute;
+      top: 5%;
+      left: 20px;
+      transform: translateY(-50%);
+      background: #ffecb3;
+      color: #ff7e29;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+
+    .cart-button:hover {
+      background: #ffd966;
+      transform: scale(1.1);
+    }
+
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 30px;
+      background: #1c1c1c;
+      border: 3px solid #ffab66;
+      border-radius: 20px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+      animation: bounceIn 0.5s;
+    }
+
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+
+    /* Cart Items */
+    .cart-item {
+      background: #ffe7d1;
+      padding: 15px;
+      border-radius: 15px;
+      margin: 10px 0;
+      border: 2px solid #ffab66;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+
+    .cart-item h3 {
+      font-size: 1.4em;
+      color: #ff7e29;
+      margin: 0;
+    }
+
+
+    #total-price, #delivery-charges, #sgst, #cgst, #final-total {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #f4a261;
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      border-top: 2px dashed #ffab66;
+    }
+
+
+    /* Billing Form */
+    label {
+      display: block;
+      font-weight: bold;
+      color: #ff7e29;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
+
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 2px solid #ffd966;
+      border-radius: 10px;
+      background: #fff9e6;
+      color: #2f2f2f;
+      font-size: 1em;
+      transition: border 0.3s, background-color 0.3s;
+    }
+
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border: 2px solid #ff7e29;
+      background: #fff0d5;
+      outline: none;
+    }
+
+
+    /* Button */
+    button {
+      background: #ff7e29;
+      color: #ffffff;
+      font-size: 1.2em;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s, transform 0.2s;
+      display: block;
+      margin: 20px auto;
+    }
+
+
+    button:hover {
+      background: #ff9f50;
+      transform: scale(1.05);
+    }
+
+
+    /* Keyframes for Sparkles */
+    @keyframes sparkle {
+      from { transform: scale(1); opacity: 0.7; }
+      to { transform: scale(1.2); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  
+    <h1 style="color: black;">Your Cart</h1>
+  
+  <a href="products.html" class="cart-button">⬅️ Back to Products</a>
+  <div class="container">
+    <div id="cart-list"></div>
+    <h2 id="total-price">Total: ₹0</h2>
+    <h2 id="delivery-charges" style="display: none;">Delivery Charges: ₹25</h2>
+    <h2 id="sgst" style="display: none;">SGST (2.5%): ₹0</h2>
+    <h2 id="cgst" style="display: none;">CGST (2.5%): ₹0</h2>
+    <h2 id="final-total" style="display: none;">Final Total: ₹0</h2>
+
+
+    <!-- Billing Form for COD Checkout -->
+    <div id="billing-form" style="display: none;">
+      <h2>Billing Details</h2>
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+
+
+      <label for="address">Address:</label>
+      <textarea id="address" required></textarea>
+
+
+      <label for="recurringOrder">Repeat this order daily:</label>
+      <input type="checkbox" id="recurringOrder">
+
+
+      <button onclick="placeOrder()">Place Order (COD)</button>
+      <button onclick="window.location.href='payments.html'">E-Payments</button>
+
+    </div>
+
+
+    <button id="proceed-button" onclick="showBillingForm()">Proceed to Billing</button>
+  </div>
+
+
+  <script>
+    const apiUrl = 'http://localhost:3003';
+    let isCartEmpty = true; // Variable to track if the cart is empty
+
+
+    async function fetchCartItems() {
+      const response = await fetch(`${apiUrl}/cart`);
+      const data = await response.json();
+      renderCartItems(data.cart, data.total);
+    }
+
+
+    function renderCartItems(cartItems, total) {
+      const cartList = document.getElementById('cart-list');
+      const totalPriceElement = document.getElementById('total-price');
+      const deliveryChargesElement = document.getElementById('delivery-charges');
+      const sgstElement = document.getElementById('sgst');
+      const cgstElement = document.getElementById('cgst');
+      const finalTotalElement = document.getElementById('final-total');
+     
+      cartList.innerHTML = '';
+
+
+      if (cartItems.length === 0) {
+        cartList.innerHTML = '<p>Your cart is empty.</p>';
+        totalPriceElement.textContent = 'Total: ₹0';
+        isCartEmpty = true; // Update variable
+        deliveryChargesElement.style.display = 'none';
+        sgstElement.style.display = 'none';
+        cgstElement.style.display = 'none';
+        finalTotalElement.style.display = 'none';
+        return;
+      }
+
+
+      isCartEmpty = false; // Update variable
+
+
+      cartItems.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        const itemTotal = item.quantity * item.price;
+
+
+        cartItem.innerHTML = `
+          <h3>${item.name}</h3>
+          <p>Price: ₹${item.price} x ${item.quantity} = ₹${itemTotal}</p>
+          <button onclick="removeFromCart('${item.name}')">Remove</button>
+        `;
+
+
+        cartList.appendChild(cartItem);
+      });
+
+
+      totalPriceElement.textContent = `Total: ₹${total}`;
+      calculateCharges(total);
+    }
+
+
+    function calculateCharges(total) {
+      const deliveryCharges = 25;
+      const sgst = total * 0.025;
+      const cgst = total * 0.025;
+      const finalTotal = total + deliveryCharges + sgst + cgst;
+
+
+      document.getElementById('delivery-charges').textContent = `Delivery Charges: ₹${deliveryCharges}`;
+      document.getElementById('sgst').textContent = `SGST (2.5%): ₹${sgst.toFixed(2)}`;
+      document.getElementById('cgst').textContent = `CGST (2.5%): ₹${cgst.toFixed(2)}`;
+      document.getElementById('final-total').textContent = `Final Total: ₹${finalTotal.toFixed(2)}`;
+
+
+      // Show charges in the order summary
+      document.getElementById('delivery-charges').style.display = 'block';
+      document.getElementById('sgst').style.display = 'block';
+      document.getElementById('cgst').style.display = 'block';
+      document.getElementById('final-total').style.display = 'block';
+    }
+
+
+    async function removeFromCart(productName) {
+      const response = await fetch(`${apiUrl}/cart/remove`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: productName })
+      });
+
+
+      if (response.ok) {
+        alert(`${productName} removed from cart.`);
+        fetchCartItems();
+      }
+    }
+
+
+    function showBillingForm() {
+      if (isCartEmpty) {
+        alert("Your cart is empty! Please add items before proceeding.");
+        return; // Prevent showing billing form if the cart is empty
+      }
+      document.getElementById('billing-form').style.display = 'block';
+    }
+
+
+    async function placeOrder() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
+      const isRecurring = document.getElementById('recurringOrder').checked;
+
+
+      const response = await fetch(`${apiUrl}/cart/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, address, isRecurring })
+      });
+
+
+      if (response.ok) {
+        alert('Order placed successfully! Generating your bill...');
+        window.location.href = 'bill.html';
+      } else {
+        alert('Error placing order.');
+      }
+    }
+
+
+    fetchCartItems();
+  </script>
+</body>
+</html>
+
+
+
+
+

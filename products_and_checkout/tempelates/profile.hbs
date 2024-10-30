@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Profile Details</h2>
+            <p><strong>Name:</strong> {{user.name}}</p>
+            <p><strong>Email:</strong> {{user.gmail}}</p>
+            <p><strong>Phone:</strong> {{user.phone}}</p>
+            <h3>Approval Status: {{#if user.isApproved}}Approved{{else}}Pending{{/if}}</h3>
+        </section>
+
+        <section>
+            <a href="/home?name={{user.name}}" class="button">Back to Home</a>
+        </section>
+    </main>
+
+    <div id="messageBox" style="border: 1px solid #ccc; padding: 10px; width: 100%; height: 200px; overflow-y: scroll;">
+        <!-- Messages will appear here -->
+    </div>
+
+    <input type="text" id="messageInput" placeholder="Type your message here">
+    <button id="sendButton">Send</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const userId = "{{user._id}}"; // Assuming `user._id` is available
+        const userName = "{{user.name}}";
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (message) {
+                socket.emit('sendMessage', { userId, message, userName });
+                messageInput.value = '';
+            }
+        }
+
+        socket.on('receiveMessage', (data) => {
+            const messageBox = document.getElementById('messageBox');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = `${data.userName}: ${data.message}`;
+            messageBox.appendChild(newMessage);
+            messageBox.scrollTop = messageBox.scrollHeight;
+        });
+
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+
+</body>
+</html>

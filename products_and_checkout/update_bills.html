@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Fetch Bill Details</title>
+  <style>
+    /* Crazy Black and Orange Theme */
+    body {
+      background-color: #1a1a1a; /* Dark background */
+      color: #ff8c00; /* Vibrant orange text */
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    h1 {
+      text-align: center;
+      color: #ff4500; /* Bright orange */
+      font-size: 3em;
+      text-shadow: 2px 2px 4px rgba(255, 140, 0, 0.5); /* Subtle shadow */
+      margin-top: 20px;
+      /* Removed glow animation */
+    }
+
+
+    .container {
+      width: 80%;
+      max-width: 650px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #f0ccaa;
+      border: 4px dashed #ff4500; /* Dashed border for craziness */
+      border-radius: 20px;
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      animation: bounce 1.5s infinite ease-in-out;
+    }
+
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+
+    h2 {
+      color: #ff8c00; /* Orange for subtitles */
+      font-size: 1.8em;
+      border-bottom: 2px dotted #ff4500;
+      padding-bottom: 5px;
+      margin-top: 25px;
+      text-shadow: 2px 2px 4px rgba(255, 69, 0, 0.5);
+    }
+
+
+    p {
+      color: #ff8c00; /* Orange for paragraph text */
+      font-size: 1.2em;
+      line-height: 1.5;
+      margin: 12px 0;
+    }
+
+
+    /* Order Summary Styles */
+    .order-item {
+      background-color: #ff6f00; /* Bright orange background */
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #ff4500; /* Vibrant border */
+      margin: 15px 0;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+
+    .order-item:hover {
+      transform: scale(1.05) rotate(2deg); /* Slightly rotate on hover */
+    }
+
+
+    .order-total, .additional-charges {
+      font-weight: bold;
+      color: #ff4500; /* Vibrant orange */
+      font-size: 1.2em;
+      text-align: left;
+      margin-top: 10px;
+      text-shadow: 2px 2px 5px rgba(255, 69, 0, 0.5);
+    }
+
+
+    .grand-total {
+      font-weight: bold;
+      color: #ff4500; /* Vibrant orange */
+      font-size: 1.5em;
+      text-align: center;
+      margin-top: 20px;
+      text-shadow: 2px 2px 5px rgba(255, 69, 0, 0.5);
+    }
+
+
+    /* Button Styles */
+    .fetchBill-btn {
+      position: absolute; /* Positioning to the right */
+      top: 50%; /* Center vertically */
+      right: 20px; /* Distance from the right */
+      transform: translateY(-50%); /* Center vertically with transform */
+      background-color: #ffb74d; /* Bright button background */
+      color: #1a1a1a; /* Dark text for contrast */
+      padding: 10px 20px;
+      border-radius: 20px; /* Matching rounded corners */
+      text-decoration: none; /* No underline */
+      font-weight: bold; /* Bold text */
+      transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+      cursor: pointer; /* Pointer on hover */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Slight shadow for depth */
+    }
+
+
+    .fetchBill-btn:hover {
+      background-color: #ff8c00; /* Darker on hover */
+      transform: scale(1.1) rotate(-2deg); /* Slightly enlarge and rotate on hover */
+    }
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin - Fetch Bill Details</h1>
+  </header>
+  <div class="container">
+    <label for="order-number">Enter Order Number:</label>
+    <input type="text" id="order-number" placeholder="ORD-123456789">
+    <button class="fetchBill-btn" onclick="fetchOrderDetails()">Fetch Bill</button>
+
+
+    <div id="order-details" class="order-details"></div>
+  </div>
+
+
+  <script>
+    const apiUrl = 'http://localhost:3000';
+
+
+    async function fetchOrderDetails() {
+      const orderNumber = document.getElementById('order-number').value;
+      if (!orderNumber) {
+        alert('Please enter a valid order number.');
+        return;
+      }
+
+
+      const response = await fetch(`${apiUrl}/admin/order/${orderNumber}`);
+      const order = await response.json();
+
+
+      if (response.status !== 200 || !order) {
+        document.getElementById('order-details').innerHTML = '<p>Order not found.</p>';
+        return;
+      }
+
+
+      displayOrderDetails(order);
+    }
+
+
+    function displayOrderDetails(order) {
+      const orderDetailsContainer = document.getElementById('order-details');
+      orderDetailsContainer.innerHTML = `
+        <h2>Order Number: ${order.orderNumber}</h2>
+        <p><strong>Name:</strong> ${order.name}</p>
+        <p><strong>Email:</strong> ${order.email}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+       
+        <h3>Order Items</h3>
+        ${order.items.map(item => `
+          <div class="order-item">
+            <p><strong>${item.name}</strong> - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</p>
+          </div>
+        `).join('')}
+
+
+        <h3>Total Amount: ₹${order.totalAmount}</h3>
+       
+        <h3>Order Status Updates</h3>
+        <div class="status-updates">
+          ${order.statusUpdates.map((update, index) => `
+            <p><strong>Step ${index + 1}:</strong> ${update.status} - ${new Date(update.timestamp).toLocaleString()}</p>
+          `).join('')}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+

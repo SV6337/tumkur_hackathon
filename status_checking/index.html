@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer - Track Order</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .container { max-width: 600px; margin: auto; padding: 20px; }
+    .order-details { margin-top: 20px; }
+    .order-item { padding: 10px 0; border-bottom: 1px solid #ddd; }
+    .order-summary { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Customer - Track Order</h1>
+  </header>
+  <div class="container">
+    <label for="order-number">Enter Order Number:</label>
+    <input type="text" id="order-number" placeholder="ORD-123456789">
+    <button onclick="fetchOrderDetails()">Track Order</button>
+
+    <div id="order-details" class="order-details"></div>
+  </div>
+
+  <script>
+    const apiUrl = 'http://localhost:3000';
+
+    async function fetchOrderDetails() {
+      const orderNumber = document.getElementById('order-number').value;
+      if (!orderNumber) {
+        alert('Please enter a valid order number.');
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/order/track/${orderNumber}`);
+      const order = await response.json();
+
+      if (response.status !== 200 || !order) {
+        document.getElementById('order-details').innerHTML = '<p>Order not found.</p>';
+        return;
+      }
+
+      displayOrderDetails(order);
+    }
+
+    function displayOrderDetails(order) {
+      const orderDetailsContainer = document.getElementById('order-details');
+      orderDetailsContainer.innerHTML = `
+        <h2>Order Number: ${order.orderNumber}</h2>
+        <p><strong>Name:</strong> ${order.name}</p>
+        <p><strong>Email:</strong> ${order.email}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+       
+        <h3>Order Items</h3>
+        ${order.items.map(item => `
+          <div class="order-item">
+            <p><strong>${item.name}</strong> - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</p>
+          </div>
+        `).join('')}
+
+        <h3>Total Amount: ₹${order.totalAmount}   
+                                                <br>(inclusive of 2.5% sgst and 2.5%cgst with ₹25 of delivery charge)</h3>
+       
+        <h3>Order Status: ${order.status}</h3>
+      `;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  background-image: url(products3.jpg);
+  background-repeat: no-repeat; /* Prevent the background from repeating */
+  background-size: cover; /* Make the background image cover the entire area */
+  background-position: center; /* Center the background image */
+  
+}
+
+
+.container {
+  width: 80%;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  color: green;
+}
+
+.product-card, .cart-item {
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.cart-button {
+  text-decoration: none;
+  color: white;
+  background-color: #28a745;
+  padding: 10px;
+  border-radius: 4px;
+}
