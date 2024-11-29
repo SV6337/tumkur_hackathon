@@ -68,79 +68,30 @@ app.get("/admin", async (req, res) => {
     }
 });
 
-app.get("/home", async (req, res) => {
-    const userName = req.query.name;
-    console.log("User name from query:", userName); // Log to debug
-
-    try {
-        const user = await collection.findOne({ name: userName });
-        if (user) {
-            return res.redirect(`/profile?name=${user.name}`);
-        } else {
-            res.status(404).send("User not found");
-        }
-    } catch (error) {
-        console.error("Error loading home page:", error);
-        res.status(500).send("Error loading home page");
-    }
-});
-
-
-app.get("/profile", async (req, res) => {
-    const userName = req.query.name;
-    console.log("Requested user:", userName); // Log the query name
-
-    try {
-        const user = await collection.findOne({ name: userName });
-        if (user) {
-            console.log("User found:", user); // Verify user data
-            res.render("profile", { user });
-        } else {
-            res.status(404).send("User not found");
-        }
-    } catch (error) {
-        console.error("Error loading profile page:", error);
-        res.status(500).send("Error loading profile page");
-    }
-});
-
-
 
 app.post("/signup", async (req, res) => {
-    const { name, password, gmail, phone, gstNumber, registrationDate } = req.body;
+    const { name, password, gmail, phone } = req.body;
     console.log("Signup Data:", req.body);
-    const passwordRegex = /^(?=.*[!@#$%^&*])(?=.{8,})/; // Password validation regex
-
-    if (!passwordRegex.test(password)) {
-        return res.status(400).send("Password must be at least 8 characters long and contain at least one special character.");
-    }
-
+    
     try {
-        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-        const newUser = await collection.create({ 
-            name, 
-            password: hashedPassword, 
-            gmail, 
-            phone,  
-            gstNumber,
-            registrationDate
-        });
+        const hashedPassword = await bcrypt.hash(password, 10); 
+        await collection.create({ name, password: hashedPassword, gmail, phone });
 
-        console.log("New User Created: ", newUser);
-        res.render("home", { naming: newUser.name }); // Redirect to home after signup
+        console.log("User signed up successfully.");
+        res.redirect("http://localhost:3000");  // Ensure this correctly redirects to login
     } catch (error) {
-        console.error("Error creating user: ", error);
+        console.error("Error signing up:", error);
         res.status(500).send("Error signing up");
     }
 });
+
 
 app.post("/login", async (req, res) => {
     const { name, password } = req.body;
     try {
         const user = await collection.findOne({ name });
         if (user && await bcrypt.compare(password, user.password)) {
-            // Redirect to homepage.html
-            return res.redirect("\homepage.html"); // Change this if necessary
+            return res.redirect("http://localhost:3003");  // Modify path if necessary
         } else {
             res.send("Incorrect username or password");
         }
@@ -149,6 +100,7 @@ app.post("/login", async (req, res) => {
         res.status(500).send("Error logging in");
     }
 });
+
 
 // Step 1: Generate and send 4-digit verification code
 app.post("/forgot-password", async (req, res) => {
